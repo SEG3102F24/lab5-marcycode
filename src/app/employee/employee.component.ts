@@ -32,14 +32,29 @@ export class EmployeeComponent {
   get email(): AbstractControl<string> {return <AbstractControl<string>>this.employeeForm.get('email'); }
 
   onSubmit() {
-    const employee: Employee = new Employee(this.name.value,
-      new Date(this.dateOfBirth.value),
+    
+    const employee: Employee = new Employee(
+      this.name.value,
+      this.dateOfBirth.value,
       this.city.value,
       this.salary.value,
       this.gender.value,
-      this.email.value);
-    this.employeeService.addEmployee(employee);
-    this.employeeForm.reset();
-    this.router.navigate(['/employees']).then(() => {});
+      this.email.value
+    );
+  
+  
+    console.log('Employee data before sending to Firebase:', employee);
+  
+   
+    this.employeeService.addEmployee(employee)
+      .then(() => {
+        console.log('Employee added successfully!');
+        this.employeeForm.reset(); 
+        this.router.navigate(['/employees']).then(() => {});
+      })
+      .catch(error => {
+        console.error('Error adding employee:', error);
+      });
   }
+  
 }
